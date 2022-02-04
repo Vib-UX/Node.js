@@ -18,12 +18,38 @@ const friends = [
     }
 ];
 
-app.get('/',(req,res)=>{
-    res.send({
-        id:0,
-        name: 'Web Browser'
-    });
+// Middleware
+app.use((req,res,next)=>{
+    const start = Date.now();
+    next();
+    const delta = Date.now() - start;
+    console.log(`${req.method}  + ${req.url} ${delta}ms`);
 })
+
+// JSON Parsing middleware
+app.use(express.json());
+
+// Post request
+app.post('/friends', (req,res)=>{
+    if(!req.body.name){
+        return res.status(400).json({
+            error: "Invalid Post request"
+        })
+    }
+    const newFriend ={
+        name: req.body.name,
+        id: friends.length
+    }
+    friends.push(newFriend);
+    res.json(newFriend)
+})
+
+// app.get('/',(req,res)=>{
+//     res.send({
+//         id:0,
+//         name: 'Web Browser'
+//     });
+// })
 
 app.get('/friends',(req,res)=>{
     res.json(friends)
