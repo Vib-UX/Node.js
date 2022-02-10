@@ -1,4 +1,6 @@
 const express = require('express');
+const planetsRouter = require('./routes/palnets/planets.router')
+
 
 const app = express();
 
