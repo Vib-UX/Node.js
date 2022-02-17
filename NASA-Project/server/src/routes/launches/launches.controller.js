@@ -1,9 +1,9 @@
-const {launches} = require('../../models/launches.model');
+const {getAllLaunches} = require('../../models/launches.model');
 
-function getAllLaunches(req,res){
-    return res.status(200).json(Array.from(launches.values())); //launches.values() gives an iterable
+function httpGetAllLaunches(req,res){
+    return res.status(200).json(getAllLaunches()); //launches.values() gives an iterable
 }
 
 module.exports={
-    getAllLaunches,
+    httpGetAllLaunches,
 }
