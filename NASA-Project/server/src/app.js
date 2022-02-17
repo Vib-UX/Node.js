@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname,'..','public_1')));
 
 app.use(planetsRouter);
-app.use(launchesRouter);
+app.use('/launches',launchesRouter);
 app.get('/*',(req,res)=>{
     res.sendFile(path.join(__dirname,'..','public_1','index.html'));
 })
