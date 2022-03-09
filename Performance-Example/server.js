@@ -1,6 +1,5 @@
 const express = require('express')
-const cluster = require('cluster')
-const os = require('os')
+
 
 const app = express()
 
@@ -27,14 +26,6 @@ app.get('/timer', (req,res)=>{
     res.send(`ding ding ding! ${process.pid}`)
 })
 
-if (cluster.isMaster){
-    console.log('Master has been started...')
-    // Maximize the performance based on the CPU core
-    for(let i=0;i<os.cpus().length;i++){
-        cluster.fork();
-    }
-    
-} else{
-    console.log('Worker process started.')
-    app.listen(3000)
-}
+console.log('Worker process started.')
+app.listen(3000)
+
