@@ -1,69 +1,84 @@
-const { parse } = require('csv-parse')
-const fs = require('fs');
-const path = require('path');
+const { parse } = require("csv-parse");
+const fs = require("fs");
+const path = require("path");
 
-const planets = require('./planets.mongo')
+const planets = require("./planets.mongo");
 
-function isHabitablePlanet(planet){
-    return planet['koi_disposition'] === 'CONFIRMED' 
-    && planet['koi_insol'] >0.36 && planet['koi_insol']<1.11
-    && planet['koi_prad']<1.6;
+function isHabitablePlanet(planet) {
+  return (
+    planet["koi_disposition"] === "CONFIRMED" &&
+    planet["koi_insol"] > 0.36 &&
+    planet["koi_insol"] < 1.11 &&
+    planet["koi_prad"] < 1.6
+  );
 }
 
-function loadPlanetsData(){
-    // Its a good practice to stream large datasets
-    return new Promise((resolve,reject) =>{
-        fs.createReadStream(path.join(__dirname,'..','..','data', 'kepler_data.csv'))
-        /*
+function loadPlanetsData() {
+  // Its a good practice to stream large datasets
+  return new Promise((resolve, reject) => {
+    fs.createReadStream(
+      path.join(__dirname, "..", "..", "data", "kepler_data.csv")
+    )
+      /*
             Pipe function is meant to connect a readable stream source to readable 
             stream destination.
 
             In our case process the data in readable format using parse 
         */
-        .pipe(parse({
-            comment: '#',
-            columns: true,
-        })) 
-        .on('data', async(data)=>{
-            if(isHabitablePlanet(data)){
-                await savePlanet(data);
-            }
+      .pipe(
+        parse({
+          comment: "#",
+          columns: true,
         })
-        .on('error', (err)=>{
-            console.log(err)
-            reject(err)
-        })
-        .on('end', async ()=>{
-            const countPlanetsFound = await getAllPlanets()
-            console.log(countPlanetsFound.length);
-            console.log('The file is ended!')
-            resolve();
-        })
-    })
+      )
+      .on("data", async (data) => {
+        if (isHabitablePlanet(data)) {
+          await savePlanet(data);
+        }
+      })
+      .on("error", (err) => {
+        console.log(err);
+        reject(err);
+      })
+      .on("end", async () => {
+        const countPlanetsFound = await getAllPlanets();
+        console.log(countPlanetsFound.length);
+        console.log("The file is ended!");
+        resolve();
+      });
+  });
 }
 
 // loadPlanetsData();
-async function getAllPlanets(){
-    return await planets.find({},{
-        "_id":0, '__v':0
-    });
-}
-
-async function savePlanet(planet){
-    try{
-        await planets.updateOne({
-            keplerName: planet.kepler_name
-        },{
-            keplerName: planet.kepler_name
-        },{
-            upsert: true,
-        })
-    } catch (err){
-        console.error(`Could not save planet ${err}`)
+async function getAllPlanets() {
+  return await planets.find(
+    {},
+    {
+      _id: 0,
+      __v: 0,
     }
+  );
 }
 
-module.exports={
-    loadPlanetsData,
-    getAllPlanets,
+async function savePlanet(planet) {
+  try {
+    await planets.updateOne(
+      {
+        keplerName: planet.kepler_name,
+      },
+      {
+        keplerName: planet.kepler_name,
+      },
+      {
+        upsert: true,
+      }
+    );
+  } catch (err) {
+    console.error(`Could not save planet ${err}`);
+  }
 }
+
+module.exports = {
+  loadPlanetsData,
+  getAllPlanets,
+};
