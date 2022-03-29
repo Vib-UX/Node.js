@@ -3,7 +3,8 @@ const planets = require('./planets.mongo')
 
 const launches = new Map();
 
-let latestFlightNumber = 100;
+const DEFAULT_LAUNCH_FLIGHT =100
+
 const launch = {
     flightNumber: 100,
     mission: 'Kepler Exploration X',
@@ -19,6 +20,15 @@ saveLaunch(launch)
 
 function existsLaunchId(launchId){
     return launches.has(launchId);
+}
+
+async function getLatestFlightNumber(){
+    const latestLaunch = await launchesDatabase.findOne().sort('-flightNumber');
+    if (!latestLaunch){
+        return DEFAULT_LAUNCH_FLIGHT
+    }
+
+    return latestLaunch.flightNumber
 }
 
 async function getAllLaunches(){
