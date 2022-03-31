@@ -1,10 +1,10 @@
-const {getAllLaunches, addNewLaunch, existsLaunchId, abortLaunchById} = require('../../models/launches.model');
+const {getAllLaunches, existsLaunchId, abortLaunchById, scheduleNewLaunch} = require('../../models/launches.model');
 
 async function httpGetAllLaunches(req,res){
     return res.status(200).json(await getAllLaunches()); //launches.values() gives an iterable
 }
 
-function httpAddNewLaunch(req,res){
+async function httpAddNewLaunch(req,res){
     const launch = req.body;
     if(!launch.launchDate || !launch.mission || !launch.target || !launch.rocket){
         return res.status(400).json({
@@ -17,7 +17,7 @@ function httpAddNewLaunch(req,res){
             error: "Invalid date format"
         })
     }
-    addNewLaunch(launch);
+    await scheduleNewLaunch(launch);
     return res.status(201).json(launch);
 }
 
