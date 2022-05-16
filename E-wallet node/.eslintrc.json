@@ -1,0 +1,26 @@
+{
+  "extends": ["airbnb", "prettier", "plugin:node/recommended"],
+
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  },
+
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "off",
+    "spaced-comment": "off",
+    "no-console": "off", //if any console.log left on our code warn us
+    "consistent-return": "off", //each of every function return something we make it 'off'
+    "func-names": "off",
+    "object-shorthand": "off",
+    "no-process-exit": "off",
+    "no-param-reassign": "off",
+    "no-return-await": "off",
+    "no-underscore-dangle": "off",
+    "class-methods-use-this": "off",
+    "prefer-destructuring": ["error", { "object": true, "array": false }],
+    "no-unused-vars": ["off", { "argsIgnorePattern": "req|res|next|val" }] //variable decleared but never used show error except [req|res|next|val]
+  }
+}

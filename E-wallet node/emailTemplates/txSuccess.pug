@@ -1,0 +1,9 @@
+extends baseEmail 
+
+block content
+    p Hi #{name},
+    -if(txDetails.sendToSender)
+        p Your Transaction to #{txDetails.coinRecieverName} is successful. 
+    -else
+        p Your have recieved #{txDetails.amount} MT Tokens from #{txDetails.coinSenderName}. 
+    p - MyWallet

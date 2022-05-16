@@ -1,0 +1,5 @@
+*.env
+node_modules
+dev-data
+uploadAndDeleteDB.js
+handlerUploadAndDelete.js

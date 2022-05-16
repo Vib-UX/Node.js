@@ -1,0 +1,9 @@
+extends baseEmail 
+
+block content 
+    p Oops!!!,
+    p Something went wrong
+    p Your Transaction to #{txdetails.coinRecieverName} of #{txdetails.amount} coin is failed.  
+    p Your cuurent balance is  #{accountBalance} coins .
+    p Please try again after sometime .
+    p - MyWallet
