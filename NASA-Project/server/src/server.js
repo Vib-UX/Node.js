@@ -9,6 +9,7 @@ const MONGO_URL = `mongodb+srv://nasa-api:CBea5kR5ateyNBs7@cluster0.oipat.mongod
 
 const  server =  http.createServer(app);
 const {loadPlanetsData} = require('./models/planets.model');
+const {loadLaunchesData} = require('./models/launches.model');
 
 mongoose.connection.once('open',()=>{
     console.log('MongoDB connection ready!')
@@ -20,6 +21,7 @@ mongoose.connection.on('error',(err)=>{
 async function loadServer(){
     await mongoose.connect(MONGO_URL)
     await loadPlanetsData();
+    await loadLaunchesData();
     server.listen(PORT, ()=>{
         console.log(`Server listening to PORT: ${PORT}...`)
     })
